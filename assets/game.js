@@ -30,7 +30,6 @@ var fight = function (enemyNames) {
         break;
       }
     }
-
     // remove enemy's health by subtracting the amount set in the playerAttack variable
     enemyHealth = enemyHealth - playerAttack;
     console.log(
@@ -80,8 +79,53 @@ var fight = function (enemyNames) {
   }
 };
 
+// function to start a new game
+var startGame = function () {
+    // reset player stats
+    playerHealth = 100;
+    playerAttack = 10;
+    playerMoney = 10;
+  
+    // fight each enemy-robot by looping over them and fighting them one at a time
+    for (var i = 0; i < enemyNames.length; i++) {
+      //if player is still alive, keep fighting
+      if (playerHealth > 0) {
+        //let player know what round they are in, remember that arrays starts at 0 so it needs to have 1 added to it
+        window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
+
+        // pick new enemy to fight based on the index of the enemyNames array
+        var pickedEnemyName = enemyNames[i];
+
+        // reset enemyHealth before starting a new fight
+        enemyHealth = 50;
+  
+        fight(pickedEnemyName);
+
+         // if we're not at the last enemy in the array
+      if (playerHealth > 0 && i < enemyNames.length - 1) {
+        // ask if player wants to use the store before the next round
+        var storeConfirm = window.confirm(
+          "The fight is over, visit the store before the next round?"
+        );
+
+        // if yes, take them to the store() function
+        if (storeConfirm) {
+          shop();
+        }
+      }
+    }
+    // after loop ends, we are either out of playerHealth or enemies to fight, so run the endGame function
+    else {
+          window.alert("You have lost your robot in battle! Game over!");
+          break;
+        }
+    }
+    endGame();
+};
+
 // start endGame function
 var endGame = function () {
+    window.alert("The game has not ended. Let's see how you did!");
   // if player is still alive, player wins!
   if (playerHealth > 0) {
     window.alert(
@@ -92,14 +136,19 @@ var endGame = function () {
   } else {
     window.alert("You've lost your robot in battle.");
   }
-};
+
+// ask player if they'd like to play again
+
 var playAgainConfirm = window.confirm("Would you like to play again?");
+
 if (playAgainConfirm) {
   //restart the game
   startGame();
+
 } else {
   window.alert("Thank you for playing Robot Gladiators! Come back soon!");
 }
+};
 
 // shop function
 var shop = function () {
@@ -152,48 +201,5 @@ var shop = function () {
   }
 };
 
-// function to start a new game
-var startGame = function () {
-  // reset player stats
-  playerHealth = 100;
-  playerAttack = 10;
-  playerMoney = 10;
-
-  // fight each enemy-robot by looping over them and fighting them one at a time
-  for (var i = 0; i < enemyNames.length; i++) {
-    //if player is still alive, keep fighting
-    if (playerHealth > 0) {
-      //let player know what round they are in, remember that arrays starts at 0 so it needs to have 1 added to it
-      window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
-      // pick new enemy to fight based on the index of the enemyNames array
-      var pickedEnemyName = enemyNames[i];
-      // reset enemyHealth before starting a new fight
-      enemyHealth = 50;
-
-      fight(pickedEnemyName);
-      // if we're not at the last enemy in the array
-      if (playerHealth > 0 && i < enemyNames.length - 1) {
-        // ask if player wants to use the store before the next round
-        var storeConfirm = window.confirm(
-          "The fight is over, visit the store before the next round?"
-        );
-
-        // if yes, take them to the store() function
-        if (storeConfirm) {
-          shop();
-        }
-      }
-    }
-    // use debugger to pause script from running and checking what is going on at that moment in the code
-    // else {
-    //   window.alert("You have lost your robot in battle! Game over!");
-    //   break;
-    //}
-    // after the loop ends, player is either out of health or enemies to fight, so run the endGame function
-    endGame();
-  }
-
-  // window.alert("This game has now ended. Let's see how you did!");
-
-  // play again
-};
+//start first game when page loads
+startGame();
